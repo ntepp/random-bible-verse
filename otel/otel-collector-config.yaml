@@ -1,0 +1,30 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4319"
+      http:
+        endpoint: "0.0.0.0:4318"
+
+exporters:
+  elasticsearch:
+    endpoint: "elastic-endpoint"
+    index: "index-b"
+    headers:
+      Authorization: "ApiKey your-elastic-api-key"
+
+service:
+  pipelines:
+    logs:
+      receivers: [otlp]
+      processors: []
+      exporters: [elasticsearch]
+    metrics:
+      receivers: [otlp]  # Receives metrics via OTLP
+      processors: []      # You can add processors for metrics if needed
+      exporters: [elasticsearch]  # Export metrics to Elasticsearch (or other backend)
+
+    traces:
+      receivers: [otlp]  # Receives traces via OTLP
+      processors: []      # You can add processors for traces if needed
+      exporters: [elasticsearch]  # Export traces to Elasticsearch (or other backend)
